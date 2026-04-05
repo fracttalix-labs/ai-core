@@ -6,13 +6,15 @@ on:
       task:
         description: "What should the AI do?"
         required: true
-        default: "Summarize anomaly detection"
+        default: "Explain anomaly detection"
 
 jobs:
   run-ai:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Run AI task
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -26,4 +28,11 @@ jobs:
             }')
 
           echo "$RESPONSE" > output.json
-          cat output.json
+
+      - name: Commit result
+        run: |
+          git config --global user.name "fracttalix-ai"
+          git config --global user.email "admin@fracttalix.com"
+          git add output.json
+          git commit -m "AI output"
+          git push
