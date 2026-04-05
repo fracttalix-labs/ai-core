@@ -8,6 +8,9 @@ on:
         required: true
         default: "Explain anomaly detection"
 
+permissions:
+  contents: write
+
 jobs:
   run-ai:
     runs-on: ubuntu-latest
@@ -28,11 +31,12 @@ jobs:
             }')
 
           echo "$RESPONSE" > output.json
+          cat output.json
 
       - name: Commit result
         run: |
           git config --global user.name "fracttalix-ai"
           git config --global user.email "admin@fracttalix.com"
           git add output.json
-          git commit -m "AI output"
+          git diff --cached --quiet || git commit -m "AI output"
           git push
