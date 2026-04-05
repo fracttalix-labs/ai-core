@@ -1,0 +1,18 @@
+name: Test AI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-ai:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call OpenAI
+        run: |
+          curl https://api.openai.com/v1/responses \
+            -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "model": "gpt-5.4-mini",
+              "input": "Say exactly: Fracttalix system is online."
+            }'
